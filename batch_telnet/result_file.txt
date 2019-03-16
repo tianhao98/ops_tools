@@ -1,0 +1,4 @@
+39.104.126.172 22 is up
+39.104.126.172 80 is error ! [Errno 61] Connection refused
+39.104.126.172 80 is error ! [Errno 61] Connection refused
+39.104.126.172 80 is error ! [Errno 61] Connection refused
