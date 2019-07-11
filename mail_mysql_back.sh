@@ -2,9 +2,9 @@
 
 USER="backup"
 PASSWORD="backupuser"
-MYSQL_IP="192.168.65.112"
+MYSQL_IP="192.168.1.1"
 MYSQL_BACK_PATH="/home/Mysql_back"
-MYSQL_BIN_PATH="/home/coremail/mysql/bin"
+MYSQL_BIN_PATH="/home/email/mysql/bin"
 DATE=`date +%F`
 MYSQL_BACK_NAME="mysql_back${DATE}.sql.gz"
 LOG_FILE="${MYSQL_BACK_PATH}/Mysql_backup.log"
