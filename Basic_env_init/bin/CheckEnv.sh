@@ -98,7 +98,6 @@ function check_os() {
     done
 }
 
-# 
 # function check_selinux(){
 #     for ip in ${IPS};do
 #         local selinux_conf_status=$(sh ${USER}@${ip} "awk  -F "=" '/^SELINUX=/ {print \$2}' /etc/selinux/config")
@@ -131,15 +130,6 @@ function check_xfs(){
 
 # 检查ntp
 function check_ntp(){
-    # if [ ${NTPD_INSTALL} == 'true' ];then
-    #     for ip in ${IPS};do
-    #         if [ ${NTPD_HOST} == ${ip} ];then
-    #             ssh ${USER}@${NTPD_HOST} "yum -y install ntp"
-    #             ssh ${USER}@${NTPD_HOST} "sed -i '/^server/d' /etc/ntp.conf && echo 'server 127.127.1.0' >> /etc/ntp.conf && systemctl start ntp" 
-    #         fi
-    #         ssh ${USER}@${ip} "yum -y install ntp >> /dev/null 2>&1 && sed -i '/^server/d' /etc/ntp.conf && echo server ${ip} >> /etc/ntp.conf && ntpdate ${ip} && systemctl start ntp"
-    #     done
-    # fi
     for ip in ${IPS};do
         local time=`ssh ${USER}@${ip} "date +%s"`
         local now=$(date +%s)
