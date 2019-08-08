@@ -3,8 +3,7 @@
 cd $(dirname "$0") || exit
 PWD=$(pwd)
 config_file="${PWD}/../conf/basic.ini"
-. "$config_file"
-sh "${PWD}"/intAnsibleConf.sh
+
 
 while getopts "dc:" OPT;do
     case ${OPT} in 
@@ -21,6 +20,9 @@ while getopts "dc:" OPT;do
     esac
 done
 
+. "$config_file"
+sh ${DEBUG} "${PWD}"/intAnsibleConf.sh
+
 if [ ! -f "${config_file}" ];then
     echo "The configuration file does not exist "
     exit 1
@@ -35,12 +37,13 @@ function display(){
 2. 检查分区是否为xfs\n\
 3. 检查所有主机os系统\n\
 4. 检查时间是否同步\n\
-5. 检查并且关闭selinux(修改完需要重启os)\n\
-6. 安装ntp\n\
-7. ops机器安装docker\n\
-8. 部署镜像中心\n\
-9. 批量安装jp包\n\
-10. 部署helm\n\
+5. 安装ansible以下所有部署操作依赖ansible
+6. 检查并且关闭selinux(修改完需要重启os)\n\
+7. 安装ntp\n\
+8. ops机器安装docker\n\
+9. 部署镜像中心harbor\n\
+10. 批量安装jp包\n\
+11. 部署helm（依赖k8s环境）\n\
 \033[0m"
 }
 
@@ -60,14 +63,17 @@ while true;do
     "4")
         /usr/bin/sh ${DEBUG} CheckEnv.sh -c ${config_file} -m "check_ntp"
 	    ;;
-    "5")
+    "6")
         /usr/bin/sh ${DEBUG} InstallEnv.sh -m "selinux"
         ;;
-    "6")
+    "7")
         /usr/bin/sh ${DEBUG} InstallEnv.sh -m "ntp"
         ;;
-    "7")
+    "8")
         /usr/bin/sh ${DEBUG} InstallEnv.sh -m "docker"
+        ;;
+     "9")
+        /usr/bin/sh ${DEBUG} InstallEnv.sh -m "harbor"
         ;;
     "q"|"exit")
 	    exit 0

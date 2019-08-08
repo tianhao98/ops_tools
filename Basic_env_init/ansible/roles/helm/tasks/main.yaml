@@ -1,0 +1,9 @@
+- name: copy helm file
+  when: inventory_hostname == helm_host
+  copy: src=helm-v2.12.1-linux-amd64.tar.gz dest=/root/helm-v2.12.1-linux-amd64.tar.gz force=yes
+  tags: helm_install
+
+- name: copy tiller image
+  copy: src=tiller-image-v2.12.1.tar.gz dest=/root/tiller-image-v2.12.1.tar.gz force=yes
+  tags: helm_install
+

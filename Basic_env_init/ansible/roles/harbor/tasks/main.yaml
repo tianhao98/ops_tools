@@ -1,0 +1,33 @@
+- name: copy docker-compose file
+  copy: src=docker-compose dest=/usr/local/bin/docker-compose mode=0755 force=yes 
+  tags: docker-compose_install
+
+- name: clear old harbor container
+  shell: "docker rm -f `docker ps -a  | grep goharbor | awk '{print $1}'`"
+  ignore_errors: true
+  tags: harbor_clear
+
+- name: clear harbor storage
+  file: path={{ harbor_storage }} state=absent
+  ignore_errors: true
+  tags: harbor_clear
+
+- name: create harbor storage
+  file: path={{ harbor_storage }} state=directory recurse=yes
+  tags: harbor_install
+
+- name: create harbor directory
+  file: path=/root/harbor state=directory recurse=yes
+  tags: harbor_install
+
+- name: copy harbor file
+  copy: src=harbor/ dest=/root/harbor mode=0755 force=yes 
+  tags: harbor_install
+
+- name: template harbor.yml 
+  template: src=harbor.yml dest=/root/harbor/harbor.yml
+  tags: harbor_install
+
+- name: install hharbor
+  shell: "cd /root/harbor && ./install.sh --with-clair"
+  tags: harbor_install

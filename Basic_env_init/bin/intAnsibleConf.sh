@@ -27,6 +27,10 @@ function replace_vars(){
     sed -i 's/{NTPD_HOST}/'${NTPD_HOST}'/g' ${HOST_CONF}
     sed -i 's/{DOCKER_REGISTRY}/'${DOCKER_REGISTRY}'/g' ${HOST_CONF}
     sed -i 's/{docker}/'${DOCKER_IPS}'/g' ${HOST_CONF} 
+    sed -i 's/{harbor}/'${BARBOR_HOST}'/g' ${HOST_CONF}
+    sed -i 's/{BARBOR_PASSWD}/'${BARBOR_PASSWD}'/g' ${HOST_CONF}
+    sed -i 's#{BARBOR_STORAGE}#'${BARBOR_STORAGE}'#g' ${HOST_CONF}
+    sed -i 's/{HELM_HOST}/'${HELM_HOST}'/g' ${HOST_CONF}
 }
 
 build_conf
