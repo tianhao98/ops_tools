@@ -1,0 +1,20 @@
+- name: copy docker bin
+  copy: src=dockerbin/ dest=/usr/bin/ mode=0755 force=yes
+  tags: copydocker
+
+- name: template docker.service to server
+  template: src=docker.service dest=/etc/systemd/system/docker.service
+  tags: docker
+  
+- name: template hosts 
+  template: src=hosts dest=/etc/hosts
+  tags: docker, hosts
+
+- name: stop load docker
+  shell: "kill -9 $(cat /var/run/docker.pid)"
+  ignore_errors: true
+  tags: docker
+
+- name: start docker
+  service: name=docker state=started enabled=yes
+  tags: docker

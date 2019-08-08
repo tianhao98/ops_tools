@@ -30,16 +30,17 @@ fi
 function display(){
     echo -e "\033[32m\
 \n-----------------------------------------\n\
-\t\t基础环境检查配\n\
+\t\t基础环境检查配置\n\
 1. 建立互信\n\
 2. 检查分区是否为xfs\n\
 3. 检查所有主机os系统\n\
 4. 检查时间是否同步\n\
-5. 安装ntp\n\
-6. ops机器安装docker\n\
-7. 部署镜像中心\n\
-8. 批量安装jp包\n\
-9. 部署helm\n\
+5. 检查并且关闭selinux(修改完需要重启os)\n\
+6. 安装ntp\n\
+7. ops机器安装docker\n\
+8. 部署镜像中心\n\
+9. 批量安装jp包\n\
+10. 部署helm\n\
 \033[0m"
 }
 
@@ -58,8 +59,17 @@ while true;do
         ;;
     "4")
         /usr/bin/sh ${DEBUG} CheckEnv.sh -c ${config_file} -m "check_ntp"
-	;;
+	    ;;
+    "5")
+        /usr/bin/sh ${DEBUG} InstallEnv.sh -m "selinux"
+        ;;
+    "6")
+        /usr/bin/sh ${DEBUG} InstallEnv.sh -m "ntp"
+        ;;
+    "7")
+        /usr/bin/sh ${DEBUG} InstallEnv.sh -m "docker"
+        ;;
     "q"|"exit")
-	exit 0
+	    exit 0
     esac
 done

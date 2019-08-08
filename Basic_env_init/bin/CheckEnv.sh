@@ -119,6 +119,7 @@ function check_os() {
 # 检查分区是否为xfs
 function check_xfs(){
     for ip in ${IPS};do
+        ssh ${USER}@${ip} "[ ! -d /var/lib/docker/ ] && mkdir /var/lib/docker/"
         local part_type=$(ssh ${USER}@${ip} "df -T /var/lib/docker/ | awk '/^\// {print \$2}'")
         if [ ${part_type} == 'xfs' ];then 
             error_log "Host: ${ip} /var/lib/docker partition system: xfs"

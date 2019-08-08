@@ -1,0 +1,7 @@
+- name: check selinux open or not
+  shell: getenforce
+  register: selinux_status
+
+- name: Modify selinux configuration
+  when: selinux_status.stdout != "Disabled"
+  lineinfile: dest=/etc/selinux/config regexp="SELINUX=enforcing" line="SELINUX=disabled" 

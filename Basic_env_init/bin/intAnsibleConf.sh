@@ -17,9 +17,16 @@ function replace_vars(){
     for ip in "${ip_list[@]}";do 
         INIT_IPS+="${ip}\n"
     done
+
+    local docker_list=(${DOCKER_HOST//,/ })
+    for ip in "${docker_list[@]}";do 
+        DOCKER_IPS+="${ip}\n"
+    done
+
     sed -i 's/{init}/'${INIT_IPS}'/g' ${HOST_CONF}
     sed -i 's/{NTPD_HOST}/'${NTPD_HOST}'/g' ${HOST_CONF}
-    sed -i 's/{NTPD_INSTALL}/'${NTPD_INSTALL}'/g' ${HOST_CONF}
+    sed -i 's/{DOCKER_REGISTRY}/'${DOCKER_REGISTRY}'/g' ${HOST_CONF}
+    sed -i 's/{docker}/'${DOCKER_IPS}'/g' ${HOST_CONF} 
 }
 
 build_conf

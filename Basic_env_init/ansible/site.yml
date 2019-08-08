@@ -1,5 +1,0 @@
----
-- hosts: {{ project }}
-  gather_facts: yes
-  roles:
-    - {{ project }}

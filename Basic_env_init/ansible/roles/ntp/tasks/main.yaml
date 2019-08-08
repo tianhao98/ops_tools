@@ -1,0 +1,34 @@
+- name: stop ntp service
+  service: name=ntpd state=stopped
+  ignore_errors: true
+  tags: stop_ntp
+
+- name: install ntpd
+  yum: name=ntp state=installed
+  tags: install_ntp
+
+- name: templates client ntp config
+  when: ansible_default_ipv4['address'] != ntpd_host
+  template: src=ntp.conf dest=/etc/ntp.conf
+  tags: install_ntp
+
+- name: copy service ntp config
+  when: ansible_default_ipv4['address'] == ntpd_host
+  copy: src=ntp.conf dest=/etc/ntp.conf force=yes
+  tags: install_ntp
+
+- name: start ntp service
+  when: ansible_default_ipv4['address'] == ntpd_host
+  service: name=ntpd state=started
+  tags: install_ntp
+
+- name: synchronization time
+  when: ansible_default_ipv4['address'] != ntpd_host
+  shell: ntpdate "{{ ntpd_host }}"
+  tags: install_ntp
+
+
+- name: start client ntp
+  when: ansible_default_ipv4['address'] != ntpd_host
+  service: name=ntpd state=started
+  tags: install_ntp
