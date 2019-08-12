@@ -1,0 +1,10 @@
+- name: copy jq rpm file
+  copy: src={{ item }} dest=/root/. force=yes
+  with_items:
+    - jq-1.5-1.el7.x86_64.rpm
+    - oniguruma-5.9.5-3.el7.x86_64.rpm
+  tags: install_jq
+
+- name: rpm install jq
+  shell: rpm -ivh /root/jq-1.5-1.el7.x86_64.rpm /root/oniguruma-5.9.5-3.el7.x86_64.rpm
+  tags: install_jq

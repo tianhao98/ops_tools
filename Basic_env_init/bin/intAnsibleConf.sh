@@ -31,7 +31,9 @@ function replace_vars(){
     sed -i 's/{BARBOR_PASSWD}/'${BARBOR_PASSWD}'/g' ${HOST_CONF}
     sed -i 's#{BARBOR_STORAGE}#'${BARBOR_STORAGE}'#g' ${HOST_CONF}
     sed -i 's/{HELM_HOST}/'${HELM_HOST}'/g' ${HOST_CONF}
-}
+    sed -i 's/{KUBE_MASTER}/'${KUBE_MASTER}'/g' ${HOST_CONF}
+    sed -i 's/{TILLER_NODE}/'${TILLER_NODE}'/g' ${HOST_CONF}
+} 
 
 build_conf
 replace_vars

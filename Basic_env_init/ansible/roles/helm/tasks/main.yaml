@@ -1,9 +1,44 @@
-- name: copy helm file
+- block:
+    - name: copy rbac-config.yaml
+      copy: src=rbac-config.yaml dest=/root/rbac-config.yaml force=yes
+      tags: helm_install
+
+    - name: create rbac
+      shell: "kubectl apply -f /root/rbac-config.yaml"
+      tags: helm_install
+
+  when: inventory_hostname == kube_master
+
+- block:
+    - name: add node Label
+      shell: kubectl label node {{ helm_tiller_node }} tiller=true --overwrite
+      tags:  helm_install
+
+    - name: copy tiller image
+      copy: src=tiller-image-v2.12.1.tar.gz dest=/root/tiller-image-v2.12.1.tar.gz force=yes
+      tags: copytiller
+
+    - name: load tiller image
+      shell: docker load -i /root/tiller-image-v2.12.1.tar.gz
+      tags: copytiller
+
+  when: inventory_hostname == helm_tiller_node
+
+- block:
+    - name: copy helm file
+      copy: src=helm dest=/usr/bin/helm  mode=0755 force=yes
+      tags: helm_install
+
+    - name: copy index.yaml 
+      copy: src=index.yaml  dest=/root/index.yaml  force=yes
+      tags: helm_install
+
+    - name: create httpd service
+      shell: "cd /root/ && nohup python -m SimpleHTTPServer 80 >/dev/null 2>&1 &"
+      tags: httpd
+
+    - name: install tiller
+      shell: helm init --node-selectors "tiller"="true" --upgrade --tiller-image gcr.io/kubernetes-helm/tiller:v2.12.1 --stable-repo-url http://"{{ helm_tiller_node }}"/
+      tags: helm_install
+
   when: inventory_hostname == helm_host
-  copy: src=helm-v2.12.1-linux-amd64.tar.gz dest=/root/helm-v2.12.1-linux-amd64.tar.gz force=yes
-  tags: helm_install
-
-- name: copy tiller image
-  copy: src=tiller-image-v2.12.1.tar.gz dest=/root/tiller-image-v2.12.1.tar.gz force=yes
-  tags: helm_install
-

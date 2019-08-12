@@ -69,9 +69,9 @@ EOF
 # 所有主机建立互信
 function OpenSshTunnel(){
     check_expect
-    if [ ! -f ${USER}/.ssh/id_rsa ] || [ ! -f ${USER}/.ssh/id_rsa.pub ];then
-        rm -rf ${USER}/.ssh/*
-        ssh-keygen -q -P "" -f ${USER}/.ssh/id_rsa && cp ${USER}/.ssh/id_rsa.pub ${USER}/.ssh/authorized_keys
+    if [ -f /"${USER}"/.ssh/id_rsa ] || [ -f /"${USER}"/.ssh/id_rsa.pub ];then
+        rm -rf /"${USER}"/.ssh/*
+        ssh-keygen -q -P "" -f /"${USER}"/.ssh/id_rsa && cp /"${USER}"/.ssh/id_rsa.pub /"${USER}"/.ssh/authorized_keys
     fi
     for ip in ${IPS};do
         sshExpect ${USER} ${ip} ${PASSWD}
@@ -98,24 +98,6 @@ function check_os() {
     done
 }
 
-# function check_selinux(){
-#     for ip in ${IPS};do
-#         local selinux_conf_status=$(sh ${USER}@${ip} "awk  -F "=" '/^SELINUX=/ {print \$2}' /etc/selinux/config")
-#         local selinux_status=$(sh ${USER}@${ip} "getenforce")
-#         if [ ${selinux_conf_status} == 'disabled' ] || [ ${selinux_status} == 'Disabled' ];then
-#             info_log "Host: ${ip} selinux status disabled"
-#         else
-#             sh ${USER}@${ip} "sed -i 's/SELINUX=enforcing/SELINUX=disabled/g' /etc/selinux/config && setenforce 0"
-            
-#         fi
-#     done
-    
-# }
-
-# function check_iptable(){
-
-# }
-
 # 检查分区是否为xfs
 function check_xfs(){
     for ip in ${IPS};do
@@ -141,6 +123,14 @@ function check_ntp(){
             error_log "Host: ${ip} ntp synchronized failed time stamp: "${now}""
         fi
     done
+}
+
+# 安装ansible
+function install_ansible(){
+    cd "${PWD}"/../ansible/ansible_rpm
+    yum -y localinstall *
+    [ $? -eq 0 ] && info_log "ansible install success" || error_log "ansible install failed"
+    
 }
 
 function display_title(){

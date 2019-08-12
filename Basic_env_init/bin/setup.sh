@@ -63,6 +63,9 @@ while true;do
     "4")
         /usr/bin/sh ${DEBUG} CheckEnv.sh -c ${config_file} -m "check_ntp"
 	    ;;
+    "5")
+        /usr/bin/sh ${DEBUG} CheckEnv.sh -c ${config_file} -m "install_ansible"
+        ;;
     "6")
         /usr/bin/sh ${DEBUG} InstallEnv.sh -m "selinux"
         ;;
@@ -74,6 +77,12 @@ while true;do
         ;;
      "9")
         /usr/bin/sh ${DEBUG} InstallEnv.sh -m "harbor"
+        ;;
+    "10")
+        /usr/bin/sh ${DEBUG} InstallEnv.sh -m "jq"
+        ;;
+    "11")
+        /usr/bin/sh ${DEBUG} InstallEnv.sh -m "helm"
         ;;
     "q"|"exit")
 	    exit 0
