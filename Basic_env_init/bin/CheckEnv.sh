@@ -46,9 +46,13 @@ function  warning_log(){
 # 检查是否有expect，并安装
 function check_expect(){
     EXPECT=`which expect`
-    if [ ! -n $EXPECT ];then
-        yun -y install expect >> /dev/null  2>&1
+    if [ ! -n "$EXPECT" ];then
+        yum -y install expect >> /dev/null  2>&1
+        if [ $? -eq 0 ];then
+            error_log "expect command install failed"
+            exit 1
         info_log 'expect command install success'
+        fi
     fi
 }
 
@@ -58,18 +62,21 @@ function sshExpect(){
     local targetip=$2
     local password=$3
     /usr/bin/expect << EOF
-        spawn ssh-copy-id -o "StrictHostKeyChecking no" $user@$targetip
+        set timeout 5
+        spawn ssh-copy-id -o "StrictHostKeyChecking=no" $user@$targetip
         expect {
                 "*password:" { send "$password\r"; exp_continue}
                 eof { send_user "${targetip} ssh trnnel success\n"}
         }
+        catch wait result
+        exit [lindex \$result 3]
 EOF
 }
 
 # 所有主机建立互信
 function OpenSshTunnel(){
     check_expect
-    if [ -f /"${USER}"/.ssh/id_rsa ] || [ -f /"${USER}"/.ssh/id_rsa.pub ];then
+    if [ ! -f /"${USER}"/.ssh/id_rsa ] || [ ! -f /"${USER}"/.ssh/id_rsa.pub ];then
         rm -rf /"${USER}"/.ssh/*
         ssh-keygen -q -P "" -f /"${USER}"/.ssh/id_rsa && cp /"${USER}"/.ssh/id_rsa.pub /"${USER}"/.ssh/authorized_keys
     fi
