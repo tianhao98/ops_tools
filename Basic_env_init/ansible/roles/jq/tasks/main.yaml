@@ -7,4 +7,5 @@
 
 - name: rpm install jq
   shell: rpm -ivh /root/jq-1.5-1.el7.x86_64.rpm /root/oniguruma-5.9.5-3.el7.x86_64.rpm
+  ignore_errors: "true"
   tags: install_jq

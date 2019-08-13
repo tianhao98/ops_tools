@@ -5,10 +5,14 @@
 - name: template docker.service to server
   template: src=docker.service dest=/etc/systemd/system/docker.service
   tags: docker
+
+- name: set hostname
+  shell: echo dockernode > /etc/hostname && hostname dockernode
+  tags: hosts
   
 - name: template hosts 
   template: src=hosts dest=/etc/hosts
-  tags: docker, hosts
+  tags: hosts
 
 - name: stop load docker
   shell: "kill -9 $(cat /var/run/docker.pid)"
