@@ -1,3 +1,8 @@
+- name: remove old docker resource 
+  shell: docker rm -f $(docker ps -aq)
+  ignore_errors: true
+  tags: remove_old_docker
+
 - name: copy docker bin
   copy: src=dockerbin/ dest=/usr/bin/ mode=0755 force=yes
   tags: copydocker
