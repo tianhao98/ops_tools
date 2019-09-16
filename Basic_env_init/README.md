@@ -20,6 +20,7 @@
 
 ## 目录介绍
 
+```
 Basic_env_init/
 ├── ansible
 │   ├── ansible_rpm  # 安装ansible所有的rpm包
@@ -35,6 +36,7 @@ Basic_env_init/
 ├── conf
 │   └── basic.ini # 配置文件
 └── README.md
+```
 
 ## 配置文件介绍
 
